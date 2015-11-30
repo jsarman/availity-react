@@ -1,3 +1,4 @@
+import webpack from 'webpack';
 import path from 'path';
 
 export default {
@@ -9,21 +10,54 @@ export default {
     publicPath: '/',
     filename: '[name].js',
     library: 'availity-react',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'umd'
   },
   externals: {
-    react: 'react'
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    }
   },
   module: {
     loaders: [
       {
-        test: /\.jsx?$/,
-        exclude: /(node_modules)/,
-        loader: 'babel?stage=0'
+        test: /\.(js|jsx)$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel',
+        query: {
+          stage: 0,
+          env: {
+            development: {
+              plugins: [
+                'react-transform'
+              ],
+              extra: {
+                'react-transform': {
+                  transforms: [
+                    {
+                      transform: 'react-transform-hmr',
+                      imports: ['react'],
+                      locals: ['module']
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
       }
     ]
   },
+  plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
+  ],
   resolve: {
     extensions: ['', '.js', '.jsx']
   }
 };
+
