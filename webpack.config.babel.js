@@ -52,6 +52,16 @@ export default {
                     }
                 )
             },
+            {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract(
+                    'style-loader',
+                    'css-loader!autoprefixer-loader?{browsers: ["last 3 versions", "ie 8", "ie 9", "> 1%"]}!less-loader',
+                    {
+                        publicPath: '../'
+                    }
+                )
+            },
 
             {
                 // test should match the following:
@@ -69,7 +79,14 @@ export default {
         ]
     },
     plugins: [
-        new BowerWebpackPlugin(),
+        new BowerWebpackPlugin({
+            excludes: [
+                /.*\.(less|map)/,
+                /glyphicons-.*\.(eot|svg|ttf|woff)/,
+                /bootstrap.*\.css/,
+                /select2.*\.(png|gif|css)/
+            ]
+        }),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
@@ -81,7 +98,11 @@ export default {
         }),
         new webpack.ResolverPlugin(
             new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-        )
+        ),
+        // Use bundle name for extracting bundle css
+        new ExtractTextPlugin('css/[name].css', {
+            allChunks: true
+        })
     ]
 
 };

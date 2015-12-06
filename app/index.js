@@ -6,7 +6,7 @@ import { createHistory, useBasename } from 'history'
 import Page1 from './components/page1';
 import Page2 from './components/page2';
 
-require('availity-uikit');
+require('availity-uikit/dist/css/availity-uikit.css');
 //require('jquery');
 const history = useBasename(createHistory)({
     basename: '/'
