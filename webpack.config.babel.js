@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 import path from 'path';
-var BowerWebpackPlugin = require("bower-webpack-plugin");
+import BowerWebpackPlugin from 'bower-webpack-plugin';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default {
     entry: {
