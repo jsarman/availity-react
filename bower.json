@@ -1,0 +1,29 @@
+{
+  "name": "availity-react",
+  "description": "Availity React SDK",
+  "main": "lib/index.js",
+  "authors": [
+    "John Sarman <John.Sarman@availity.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "availity",
+    "react",
+    "sdk",
+    "web"
+  ],
+  "homepage": "https://github.com/jsarman/availity-react",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "availity-uikit": "~1.1.0",
+    "history.js": "history#~1.8.0"
+  },
+  "devDependencies": {}
+}

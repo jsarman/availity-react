@@ -1,16 +1,16 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Router, Route, Link, Redirect } from 'react-router'
-//import { createHistory, useBasename } from 'history'
+import { createHistory, useBasename } from 'history'
 
 import Page1 from './components/page1';
 import Page2 from './components/page2';
 
-//require('availity-uikit');
+require('availity-uikit');
 //require('jquery');
-// const history = useBasename(createHistory)({
-//     basename: '/'
-// })
+const history = useBasename(createHistory)({
+    basename: '/'
+})
 
 class App extends React.Component {
     render() {
@@ -30,7 +30,7 @@ class App extends React.Component {
 }
 
 render((
-    <Router >
+    <Router history={history}>
     <Route path="/" component={App}>
       <Route path="page1" component={Page1} />
       <Route path="page2" component={Page2} />

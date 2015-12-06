@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import path from 'path';
+var BowerWebpackPlugin = require("bower-webpack-plugin");
 
 export default {
     entry: {
@@ -12,14 +13,11 @@ export default {
         library: 'availity-react',
         libraryTarget: 'umd'
     },
-    externals: {
-        react: {
-            root: 'React',
-            commonjs2: 'react',
-            commonjs: 'react',
-            amd: 'react'
-        }
+    resolve: {
+        extensions: ['', '.js', '.jsx'],
+        root: [path.join(__dirname, "bower_components")]
     },
+
     module: {
         loaders: [
             {
@@ -27,23 +25,18 @@ export default {
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel',
                 query: {
-                    stage: 0,
-                    env: {
-                        development: {
-                            plugins: [
-                                'react-transform'
-                            ],
-                            extra: {
-                                'react-transform': {
-                                    transforms: [
-                                        {
-                                            transform: 'react-transform-hmr',
-                                            imports: ['react'],
-                                            locals: ['module']
-                                        }
-                                    ]
-                                }
-                            }
+                    "stage": 0,
+                    "plugins": ["react-transform:after"],
+                    "extra": {
+                        "react-transform": {
+                            "transforms": [{
+                                "transform": "react-transform-hmr",
+                                "imports": ["react"],
+                                "locals": ["module"]
+                            }, {
+                                "transform": "react-transform-catch-errors",
+                                "imports": ["react", "redbox-react"]
+                            }]
                         }
                     }
                 }
@@ -51,13 +44,20 @@ export default {
         ]
     },
     plugins: [
+        new BowerWebpackPlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        })
-    ],
-    resolve: {
-        extensions: ['', '.js', '.jsx']
-    }
+        }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        }),
+        new webpack.ResolverPlugin(
+            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
+        )
+    ]
+
 };
 
