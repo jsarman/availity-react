@@ -1,13 +1,13 @@
 import React from 'react'
-import { Panel, ButtonInput, Input } from 'react-bootstrap'
+import { Panel, Button, Input, ButtonToolbar } from 'react-bootstrap'
 
 
 var Footer = (
-<Input wrapperClassName="">
-				<button type="button" className="btn btn-default">Clear</button>
-				<button type="button" className="btn btn-info" >Show</button>
-				<input type="submit" className="btn btn-primary form-controls-right" value="Next"/>
-			</Input>
+<ButtonToolbar>
+				<Button type="reset" bsStyle="default" >Clear</Button>
+				<Button type="button" bsStyle="info">Show </Button>
+				<Button type="submit" bsStyle="primary" className="form-controls-right" >Next </Button>
+			</ButtonToolbar>
 );
 
 class Page1 extends React.Component {
