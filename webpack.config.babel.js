@@ -40,7 +40,31 @@ export default {
                         }
                     }
                 }
-            }
+            },
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract(
+                    'style',
+                    'css',
+                    {
+                        publicPath: '.'
+                    }
+                )
+            },
+
+            {
+                // test should match the following:
+                //
+                //  '../fonts/availity-font.eot?18704236'
+                //  '../fonts/availity-font.eot'
+                //
+                test: /\.(ttf|woff|eot|svg).*/,
+                loader: 'file?name=fonts/[name].[ext]'
+            },
+            {
+                test: /\.(\.jpe?g|png|gif)$/,
+                loader: 'file?name=images/[name].[ext]'
+            },
         ]
     },
     plugins: [
