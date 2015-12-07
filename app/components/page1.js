@@ -1,29 +1,8 @@
 import React from 'react';
-import { Panel, Button, Input, ButtonToolbar, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Panel, Button, ButtonToolbar } from 'react-bootstrap';
+import AVTextInput from '../uikit/AVTextInput';
 
 
-
-
-function getTooltip(id, tip) {
-    return (
-        <Tooltip id={id}>
-			{tip}
-		</Tooltip>
-        )
-}
-
-function getLabel(inputId, label, tip, alignment) {
-    if (!alignment) {
-        alignment = "right";
-    }
-    const tooltip = getTooltip(inputId + "Tooltip", tip);
-
-    return (
-        <OverlayTrigger placement={alignment} overlay={tooltip}>
-        	<label htmlFor={inputId}>{label}</label>
-    	</OverlayTrigger>
-        );
-}
 
 class Page1 extends React.Component {
     render() {
@@ -36,14 +15,26 @@ class Page1 extends React.Component {
         );
         return (
             <form>
-				<Panel header="User Profile" footer={Footer}>
-					<Input id="name" type="text" label={getLabel("name", "Name", "A word or set of words by which a person, animal, place, or thing is known, addressed, or referred")} />
-            	
-            	</Panel>
+			<Panel header="User Profile" footer={Footer}>
+					
+            <AVTextInput
+            label="Name"
+            tooltipText="A word or set of words by which a person, animal, place, or thing is known, addressed, or referred"
+            placeholder="Enter 1 letter to see validation in action" />
+            
+            <AVTextInput
+            label="Date of Birth"
+            tooltipText="Enter Date of Birth"
+            placeholder="When were you born?" />
+
+          
+
+
+            </Panel>
 			</form>
             );
     }
 }
 
 
-export default Page1;;
+export default Page1;

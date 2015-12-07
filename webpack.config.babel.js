@@ -96,9 +96,6 @@ export default {
             jQuery: "jquery",
             "window.jQuery": "jquery"
         }),
-        new webpack.ResolverPlugin(
-            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-        ),
         // Use bundle name for extracting bundle css
         new ExtractTextPlugin('css/[name].css', {
             allChunks: true
