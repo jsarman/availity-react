@@ -50,7 +50,6 @@
     "expose": "0.1.4",
     "extract-text-webpack-plugin": "0.9.1",
     "file-loader": "0.8.5",
-    "history": "1.13.1",
     "jquery": "2.1.4",
     "jsx-loader": "^0.13.2",
     "less": "2.5.3",
