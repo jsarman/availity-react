@@ -14,13 +14,32 @@ export default {
         library: 'availity-react',
         libraryTarget: 'umd'
     },
+    noParse: [
+        /.*bower_components.*/
+    ],
     resolve: {
         extensions: ['', '.js', '.jsx'],
-        root: [path.join(__dirname, "bower_components")]
+        modulesDirectories: ['bower_components', 'node_modules'],
+        alias: {
+            'lodash': 'lodash-compat'
+        }
     },
+    devtool: 'cheap-module-eval-source-map',
 
     module: {
         loaders: [
+            {
+                test: /[\\\/]jquery\.js$/,
+                loader: 'expose?$!expose?jQuery'
+            }, // export jQuery and $ to global scope.
+            {
+                test: /[\\\/]lodash\.js$/,
+                loader: 'expose?_'
+            }, // export _ global scope.
+            {
+                test: /[\\\/]moment\.js$/,
+                loader: 'expose?moment'
+            },
             {
                 test: /\.(js|jsx)$/,
                 exclude: /(node_modules|bower_components)/,
@@ -48,7 +67,7 @@ export default {
                     'style',
                     'css',
                     {
-                        publicPath: '.'
+                        publicPath: '../'
                     }
                 )
             },
@@ -79,6 +98,16 @@ export default {
         ]
     },
     plugins: [
+        // ignore all the moment local files
+        new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
+        new BowerWebpackPlugin({
+            excludes: [
+                /.*\.(less|map)/,
+                /glyphicons-.*\.(eot|svg|ttf|woff)/,
+                /bootstrap.*\.css/,
+                /select2.*\.(png|gif|css)/
+            ]
+        }),
         new BowerWebpackPlugin({
             excludes: [
                 /.*\.(less|map)/,
@@ -94,7 +123,8 @@ export default {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            "window.jQuery": "jquery"
+            "window.jQuery": "jquery",
+            _: 'lodash'
         }),
         // Use bundle name for extracting bundle css
         new ExtractTextPlugin('css/[name].css', {
@@ -103,4 +133,3 @@ export default {
     ]
 
 };
-

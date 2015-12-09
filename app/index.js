@@ -3,10 +3,11 @@ import { render } from 'react-dom'
 import { Router, Route, Link, Redirect } from 'react-router'
 import { createHistory, useBasename } from 'history'
 
-import Page1 from './components/page1';
-import Page2 from './components/page2';
+import Page1 from './components/page1'
+import Page2 from './components/page2'
 
-require('availity-uikit/dist/css/availity-uikit.css');
+//require('availity-uikit/dist/css/availity-uikit.css');
+import uikit from 'availity-uikit'
 require('jquery');
 const history = useBasename(createHistory)({
     basename: '/'
@@ -20,7 +21,7 @@ class App extends React.Component {
                 <div role="tabpanel">
             <ul className="nav nav-tabs" role="tablist">
                 <li><Link to="/page1" activeClassName="active">Page 1</Link></li>
-                <li><Link to="/page2" activeClassName="active">Page 2</Link></li>
+               <li><Link to="/page2" activeClassName="active">Page 2</Link></li>
             </ul>
             </div>
             {this.props.children}
