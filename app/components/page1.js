@@ -1,33 +1,31 @@
 import React from 'react';
-import { Panel, Button, ButtonToolbar } from 'react-bootstrap';
-import AVTextInput from '../uikit/av-text-input';
-import AVDateInput from '../uikit/av-date-input';
-import store from '../stores/ProfileStore'
+import { connect } from 'react-redux'
+import { Input, Panel, Button, ButtonToolbar } from 'react-bootstrap'
+import AVTextInput from '../uikit/AVTextInput'
+import AVDateInput from '../uikit/AVDateInput'
+import AVSelect from '../uikit/AVSelect'
+import { updateField, enableTooltips } from '../actions'
 
 
 class Page1 extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            showTooltip: true
-        }
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(store.getState());
+        console.log(this.props.userProfile);
     }
+
     render() {
-        const showTooltip = this.state.showTooltip;
-        const Footer = (
+        const {dispatch, userProfile, uiSettings} = this.props;
+        const Buttons = (
         <ButtonToolbar>
             <Button type="reset" bsStyle="default" >Clear</Button>
-            <Button type="button" onClick={(e) => {
-            this.setState({
-                showTooltip: !showTooltip
-            })
-        }} bsStyle="info">{showTooltip ? 'Hide' : 'Show'}</Button>
+            <Button type="button" onClick={e => dispatch(enableTooltips(!uiSettings.enableTooltips))}
+        bsStyle="info">{uiSettings.enableTooltips ? 'Hide' : 'Show'}
+            </Button>
             <Button type="submit" bsStyle="primary" className="form-controls-right" >Next</Button>
         </ButtonToolbar>
         );
@@ -37,32 +35,70 @@ class Page1 extends React.Component {
             todayHighlight: true
         };
 
-        // var {profile} = this.state;
+        const options = [
+            {
+                text: 'Florida',
+                id: 'FL'
+            },
+            {
+                text: 'Georgia',
+                id: 'GA'
+            },
+            {
+                text: 'West Virginia',
+                id: 'WV'
+            },
+            {
+                text: 'Hawaii',
+                id: 'HI'
+            },
+            {
+                text: 'Texas',
+                id: 'TX'
+            }
+        ];
+
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
-            <Panel header="User Profile" footer={Footer}>
+            <Panel header={<h1>User Profile</h1>} footer={Buttons}>
                     
-            <AVTextInput store={store} modelKey="name"
+            <AVTextInput value={userProfile.name} onChange={e => dispatch(updateField('name', e.target.value))}
             label="Name"
             tooltipText="A word or set of words by which a person, animal, place, or thing is known, addressed, or referred"
             placeholder="Enter 1 letter to see validation in action"
-            showTooltip={this.state.showTooltip} />
+            showTooltip={uiSettings.enableTooltips} />
             
          
-          <AVDateInput store={store} modelKey="dob"
+            <AVDateInput value={userProfile.dob} onChange={e => dispatch(updateField('dob', e.target.value))}
             label="Date of Birth"
             tooltipText="Enter Date of Birth"
             placeholder="When were you born?"
             showCalendar={true}
             datePickerOptions={datePickerOptions}
-            showTooltip={this.state.showTooltip} />
+            showTooltip={uiSettings.enableTooltips} />
+            
+            <AVSelect data={options} value={userProfile.stateCode} onChange={e => dispatch(updateField('stateCode', e.val))}
+            label="Favorite State"
+            tooltipText="Pick your Favorite State"
+            placeholder="Select State"
+            showTooltip={uiSettings.enableTooltips}
 
-
+            />
+            
             </Panel>
             </form>
+
             );
     }
 }
 
+Page1.propTypes = {
+    userProfile: React.PropTypes.object,
+    uiSettings: React.PropTypes.object
+}
 
-export default Page1;
+function select(state) {
+    return state;
+}
+
+export default connect(state => state)(Page1)

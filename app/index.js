@@ -1,13 +1,16 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 import { Router, Route, Link, Redirect } from 'react-router'
 import { createHistory, useBasename } from 'history'
+import rootReducer from './reducers'
 
 import Page1 from './components/page1'
 import Page2 from './components/page2'
 
-//require('availity-uikit/dist/css/availity-uikit.css');
 import uikit from 'availity-uikit'
+
 require('jquery');
 const history = useBasename(createHistory)({
     basename: '/'
@@ -30,11 +33,17 @@ class App extends React.Component {
     }
 }
 
+let store = createStore(rootReducer);
+
+
+
 render((
+    <Provider store={store}>
     <Router history={history}>
     <Route path="/" component={App}>
       <Route path="page1" component={Page1} />
       <Route path="page2" component={Page2} />
     </Route>
   </Router>
+  </Provider>
     ), document.getElementById('main'))
