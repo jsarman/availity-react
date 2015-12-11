@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import 'select2';
+import classNames from 'classnames'
 
 import AVLabel from './AVLabel'
 
@@ -54,10 +55,13 @@ export default class AVSelect extends Component {
   }
 
   render() {
-  	 var {id, inputRef, label, tooltipText, tooltipAlignment, showTooltip} = this.props;
+  	 var {id, inputRef, label, tooltipText, tooltipAlignment, showTooltip, bsStyle, help} = this.props;
   	id = id ? id : this.guid;
+  	const helpBlock = help ? <span className="help-block">{help}</span>: undefined;
+  	let bsStyleText = bsStyle ? 'has' + bsStyle : '';
+  	const classes = classNames({'form-group':true,[ "has-" + (() => bsStyle)() ]: bsStyle});
     return (
-    	<div className="form-group">
+    	<div className={classes} >
     	<AVLabel htmlFor={id} label={label} tooltipText={tooltipText} tooltipAlignment={tooltipAlignment} showTooltip={showTooltip}/>
     
       <select ref={c => this._select = c} multiple={this.props.multiple}>
@@ -70,7 +74,7 @@ export default class AVSelect extends Component {
           return (<option key={'option-' + k} value={item.id}>{item.text}</option>);
         })}
       </select>
-     
+     {helpBlock}
       </div>
     );
   }

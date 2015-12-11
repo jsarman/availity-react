@@ -69,7 +69,7 @@ class Page1 extends React.Component {
             showTooltip={uiSettings.enableTooltips} />
             
          
-            <AVDateInput value={userProfile.dob} onChange={e => dispatch(updateField('dob', e.target.value))}
+            <AVDateInput bsStyle="error" help="YOU GONE" value={userProfile.dob} onChange={e => dispatch(updateField('dob', e.target.value))}
             label="Date of Birth"
             tooltipText="Enter Date of Birth"
             placeholder="When were you born?"
@@ -77,7 +77,7 @@ class Page1 extends React.Component {
             datePickerOptions={datePickerOptions}
             showTooltip={uiSettings.enableTooltips} />
             
-            <AVSelect data={options} value={userProfile.stateCode} onChange={e => dispatch(updateField('stateCode', e.val))}
+            <AVSelect bsStyle = "error" help="YOU GONE"  data={options} value={userProfile.stateCode} onChange={e => dispatch(updateField('stateCode', e.val))}
             label="Favorite State"
             tooltipText="Pick your Favorite State"
             placeholder="Select State"
@@ -95,10 +95,6 @@ class Page1 extends React.Component {
 Page1.propTypes = {
     userProfile: React.PropTypes.object,
     uiSettings: React.PropTypes.object
-}
-
-function select(state) {
-    return state;
 }
 
 export default connect(state => state)(Page1)
