@@ -18,6 +18,13 @@ class Page1 extends React.Component {
         console.log(this.props.userProfile);
     }
 
+    handleFieldUpdate(field, value) {
+        this.props.dispatch(updateField({
+            field,
+            value
+        }));
+    }
+
     render() {
         const {dispatch, userProfile, uiSettings} = this.props;
         const Buttons = (
@@ -57,19 +64,18 @@ class Page1 extends React.Component {
                 id: 'TX'
             }
         ];
-
+        console.log(this.props);
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
             <Panel header={<h1>User Profile</h1>} footer={Buttons}>
                     
-            <AVTextInput value={userProfile.name} onChange={e => dispatch(updateField('name', e.target.value))}
+            <AVTextInput value={userProfile.name} onChange={e => this.handleFieldUpdate('name', e.target.value)}
             label="Name"
             tooltipText="A word or set of words by which a person, animal, place, or thing is known, addressed, or referred"
             placeholder="Enter 1 letter to see validation in action"
             showTooltip={uiSettings.enableTooltips} />
-            
          
-            <AVDateInput bsStyle="error" help="YOU GONE" value={userProfile.dob} onChange={e => dispatch(updateField('dob', e.target.value))}
+            <AVDateInput bsStyle="error" help="YOU GONE" value={userProfile.dob} onChange={e => this.handleFieldUpdate('dob', e.target.value)}
             label="Date of Birth"
             tooltipText="Enter Date of Birth"
             placeholder="When were you born?"
@@ -77,7 +83,7 @@ class Page1 extends React.Component {
             datePickerOptions={datePickerOptions}
             showTooltip={uiSettings.enableTooltips} />
             
-            <AVSelect bsStyle = "error" help="YOU GONE"  data={options} value={userProfile.stateCode} onChange={e => dispatch(updateField('stateCode', e.val))}
+            <AVSelect bsStyle = "error" help="YOU GONE"  data={options} value={userProfile.stateCode} onChange={e => this.handleFieldUpdate('stateCode', e.val)}
             label="Favorite State"
             tooltipText="Pick your Favorite State"
             placeholder="Select State"
@@ -90,6 +96,8 @@ class Page1 extends React.Component {
 
             );
     }
+
+
 }
 
 Page1.propTypes = {

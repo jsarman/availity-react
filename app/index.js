@@ -13,7 +13,7 @@ import uikit from 'availity-uikit'
 require('jquery');
 
 let createStoreWithMiddleware = applyMiddleware(createLogger())(createStore)
-let store = createStoreWithMiddleware(rootReducer);
+let store = createStoreWithMiddleware(rootReducer, {});
 
 class App extends React.Component {
     render() {

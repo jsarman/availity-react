@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { handleActions } from 'redux-actions';
 import { FIELD_UPDATE, SHOW_TOOLTIPS } from '../actions'
 
 const initialUISettingsState = {
@@ -11,28 +12,22 @@ const initialUserProfile = {
     stateCode: ''
 }
 
-function uiSettings(state = initialUISettingsState, action) {
-    switch (action.type) {
-    case SHOW_TOOLTIPS:
-        return Object.assign({}, state, {
-            enableTooltips: action.enableTooltips
-        });
-    default:
-        return state
-    }
-}
+const uiSettings = handleActions({
+    SHOW_TOOLTIPS: (state, action) => (
+    Object.assign({}, state, {
+            enableTooltips: action.payload
+        })
+    )
+}, initialUISettingsState)
 
-function userProfile(state = initialUserProfile, action) {
-    switch (action.type) {
-    case FIELD_UPDATE:
-        let update = {};
-        update[action.field] = action.value;
-        return Object.assign({}, state, update);
-    default:
-        return state
-    }
-}
 
+const userProfile = handleActions({
+    FIELD_UPDATE: (state, action) => (
+    Object.assign({}, state, {
+            [action.payload.field]: action.payload.value
+        })
+    )
+}, initialUserProfile)
 
 const rootReducer = combineReducers({
     uiSettings,
