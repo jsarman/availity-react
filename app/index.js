@@ -1,15 +1,19 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers'
-
+import createLogger from 'redux-logger'
+//import logger from './middleware/logger'
 import Page1 from './components/page1'
 import Page2 from './components/page2'
 
 import uikit from 'availity-uikit'
 
 require('jquery');
+
+let createStoreWithMiddleware = applyMiddleware(createLogger())(createStore)
+let store = createStoreWithMiddleware(rootReducer);
 
 class App extends React.Component {
     render() {
@@ -28,7 +32,7 @@ class App extends React.Component {
     }
 }
 
-let store = createStore(rootReducer);
+
 
 
 
