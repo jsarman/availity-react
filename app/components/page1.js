@@ -4,7 +4,7 @@ import { Input, Panel, Button, ButtonToolbar } from 'react-bootstrap'
 import AVTextInput from '../uikit/AVTextInput'
 import AVDateInput from '../uikit/AVDateInput'
 import AVSelect from '../uikit/AVSelect'
-import { updateField, enableTooltips } from '../actions'
+import { updateUserProfile, enableTooltips } from '../actions'
 
 
 class Page1 extends React.Component {
@@ -18,8 +18,9 @@ class Page1 extends React.Component {
         console.log(this.props.userProfile);
     }
 
-    handleFieldUpdate(field, value, validate = true) {
-        this.props.dispatch(updateField({
+    handleFieldUpdate(formName, field, value, validate = true) {
+        this.props.dispatch(updateUserProfile({
+            formName,
             field,
             value,
             validate
@@ -69,13 +70,13 @@ class Page1 extends React.Component {
             <form onSubmit={this.handleSubmit.bind(this)}>
             <Panel header={<h1>User Profile</h1>} footer={Buttons}>
                     
-            <AVTextInput avValue={userProfile.name} onChange={e => this.handleFieldUpdate('name', e.target.value)}
+            <AVTextInput avValue={userProfile.name} onChange={e => this.handleFieldUpdate('userProfile', 'name', e.target.value)}
             label="Name"
             tooltipText="A word or set of words by which a person, animal, place, or thing is known, addressed, or referred"
             placeholder="Enter 1 letter to see validation in action"
             showTooltip={uiSettings.enableTooltips} />
          
-            <AVDateInput avValue={userProfile.dob} onChange={e => this.handleFieldUpdate('dob', e.target.value)}
+            <AVDateInput avValue={userProfile.dob} onChange={e => this.handleFieldUpdate('userProfile', 'dob', e.target.value)}
             label="Date of Birth"
             tooltipText="Enter Date of Birth"
             placeholder="When were you born?"
@@ -83,7 +84,7 @@ class Page1 extends React.Component {
             datePickerOptions={datePickerOptions}
             showTooltip={uiSettings.enableTooltips} />
             
-            <AVSelect data={options} avValue={userProfile.stateCode} onChange={e => this.handleFieldUpdate('stateCode', e.val)}
+            <AVSelect data={options} avValue={userProfile.stateCode} onChange={e => this.handleFieldUpdate('userProfile', 'stateCode', e.val)}
             label="Favorite State"
             tooltipText="Pick your Favorite State"
             placeholder="Select State"
