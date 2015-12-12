@@ -4,7 +4,8 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers'
 import createLogger from 'redux-logger'
-//import logger from './middleware/logger'
+//import Validator from 'redux-validator';
+import Validator from './middleware/validator'
 import Page1 from './components/page1'
 import Page2 from './components/page2'
 
@@ -12,7 +13,7 @@ import uikit from 'availity-uikit'
 
 require('jquery');
 
-let createStoreWithMiddleware = applyMiddleware(createLogger())(createStore)
+let createStoreWithMiddleware = applyMiddleware(createLogger(), Validator())(createStore)
 let store = createStoreWithMiddleware(rootReducer, {});
 
 class App extends React.Component {

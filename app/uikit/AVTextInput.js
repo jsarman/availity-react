@@ -13,10 +13,17 @@ class AVTextInput extends React.Component {
     }
     
     render() {
-        let {id, inputRef, label, tooltipText, tooltipAlignment, showTooltip, ...others} = this.props;
+        let {id, inputRef, label, tooltipText, tooltipAlignment, showTooltip, avValue, ...others} = this.props;
 		id = id ? id : this.guid;
+
         const labelNode = <AVLabel {...this.props} htmlFor={id} />
-        
+        if(avValue) {
+         const bsStyle = avValue.errors ? 'error' : undefined;
+         const helpBlock = avValue.errors ? avValue.errors.message : undefined;
+           return (
+            <Input id={id} type="text" value={avValue.value} bsStyle={bsStyle} help={helpBlock} ref={inputRef} label={labelNode}  {...others} />
+            ); 
+        }
         return (
             <Input id={id} type="text" ref={inputRef} label={labelNode}  {...others} />
             );
