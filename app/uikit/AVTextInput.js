@@ -7,25 +7,28 @@ let count = 0;
 
 class AVTextInput extends React.Component {
 
-	constructor(props) {
+    constructor(props) {
         super(props);
         this.guid = 'input-ui-' + count++;
     }
-    
+
     render() {
-        let {id, inputRef, label, tooltipText, tooltipAlignment, showTooltip, avValue, ...others} = this.props;
-		id = id ? id : this.guid;
+        let {id, value, inputRef, label, tooltipText, tooltipAlignment, showTooltip, avValue, bsStyle, help, ...others} = this.props;
+        id = id ? id : this.guid;
 
         const labelNode = <AVLabel {...this.props} htmlFor={id} />
-        if(avValue) {
-         const bsStyle = avValue.errors ? 'error' : undefined;
-         const helpBlock = avValue.errors ? avValue.errors.message : undefined;
-           return (
-            <Input id={id} type="text" value={avValue.value} bsStyle={bsStyle} help={helpBlock} ref={inputRef} label={labelNode}  {...others} />
-            ); 
+        let valueOverride, bsStyleOverride, helpBlock;
+        if (avValue) {
+            bsStyleOverride = avValue.errors ? 'error' : bsStyle;
+            helpBlock = avValue.errors ? avValue.errors.message : help;
+            valueOverride = avValue.value;
+        } else {
+            bsStyleOverride = bsStyle;
+            helpBlock = help;
+            valueOverride = value;
         }
         return (
-            <Input id={id} type="text" ref={inputRef} label={labelNode}  {...others} />
+            <Input id={id} type="text" value={valueOverride} bsStyle={bsStyleOverride} help={helpBlock} ref={inputRef} label={labelNode}  {...others} />
             );
     }
 

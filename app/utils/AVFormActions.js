@@ -70,4 +70,7 @@ export function createAVFormUpdateAction(event, payload) {
     })
 }
 
+export function createAVFormResetAction(event, payload) {
+    return createAction(event, payload => payload);
+}
 

@@ -39,12 +39,21 @@ export default class AVSelect extends Component {
         this.guid = 'input-select-' + count++;
     }
 
+    componentWillReceiveProps() {
+      if(this.props.avValue){
+        this.el.select2('val', this.props.avValue.value);
+      } else {
+        this.el.select2('val',this.props.value);
+      }
+    }
+
     componentDidMount() {
         this.el = $(ReactDOM.findDOMNode(this._select));
         this.el.select2(Object.assign(this.props.options, {
             placeholder: this.props.placeholder
         }));
-        this.el.select2('val', this.props.value);
+        console.log(this._select)
+        //this.el.select2('val', this.props.value);
 
         this.props.events.forEach(event => {
             this.el.on(event[0], this.props[event[1]]);
@@ -77,14 +86,14 @@ export default class AVSelect extends Component {
             <div className={classes} >
       <AVLabel htmlFor={id} label={label} tooltipText={tooltipText} tooltipAlignment={tooltipAlignment} showTooltip={showTooltip}/>
     
-      <select ref={c => this._select = c} multiple={this.props.multiple}>
+      <select defaultValue={value} ref={c => this._select = c} multiple={this.props.multiple}>
          <option></option>
         {this.props.data.map((item, k) => {
                 if (typeof item === 'string' ||
                         ((!!item && typeof item === 'object') && Object.prototype.toString.call(item) === '[object String]')) {
-                    return (<option key={'option-' + k} value={item}>{item}</option>);
+                    return (<option key={'option-' + k} value={item} selected={value === item ? 'selected':undefined}>{item}</option>);
                 }
-                return (<option key={'option-' + k} value={item.id}>{item.text}</option>);
+                return (<option key={'option-' + k} value={item.id} >{item.text}</option>);
             })}
       </select>
      {helpBlock}

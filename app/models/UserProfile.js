@@ -1,8 +1,9 @@
 import { createAVFormReducer } from '../utils/AVFormReducer'
-import { createAVFormUpdateAction } from '../utils/AVFormActions'
-import { isDate } from 'validator'
+import { createAVFormUpdateAction, createAVFormResetAction } from '../utils/AVFormActions'
+import { isEmail } from 'validator'
 
 const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
+const RESET_USER_PROFILE = 'RESET_USER_PROFILE'
 
 const initialUserProfile = {
     name: {
@@ -13,12 +14,20 @@ const initialUserProfile = {
             errorMessage: 'The username can only contain letters.'
         }
     },
+    email: {
+        value: '',
+        validation: {
+            required: true,
+            validator: value => isEmail(value),
+            errorMessage: 'The email is invalid.'
+        }
+    },
     dob: {
         value: '',
         validation: {
             required: true,
-            validator: isDate,
-            errorMessage: 'The Date must be in format MM-DD-YYYY'
+            validator: value => moment(value, 'mm/dd/yyyy').isValid(),
+            errorMessage: 'The Date must be in format MM/DD/YYYY'
         }
     },
     stateCode: {
@@ -30,5 +39,6 @@ const initialUserProfile = {
     }
 }
 
-export const userProfile = createAVFormReducer(UPDATE_USER_PROFILE, initialUserProfile);
+export const userProfile = createAVFormReducer(UPDATE_USER_PROFILE, RESET_USER_PROFILE, initialUserProfile);
 export const updateUserProfileAction = createAVFormUpdateAction(UPDATE_USER_PROFILE);
+export const resetUserProfileAction = createAVFormResetAction(RESET_USER_PROFILE);

@@ -4,7 +4,7 @@ import { Input, Panel, Button, ButtonToolbar } from 'react-bootstrap'
 import AVTextInput from '../uikit/AVTextInput'
 import AVDateInput from '../uikit/AVDateInput'
 import AVSelect from '../uikit/AVSelect'
-import { updateUserProfile, enableTooltips } from '../actions'
+import { updateUserProfile, resetUserProfile, enableTooltips } from '../actions'
 
 
 class Page1 extends React.Component {
@@ -31,7 +31,7 @@ class Page1 extends React.Component {
         const {dispatch, userProfile, uiSettings} = this.props;
         const Buttons = (
         <ButtonToolbar>
-            <Button type="reset" bsStyle="default" >Clear</Button>
+            <Button type="reset" bsStyle="default" onClick={() => dispatch(resetUserProfile({}))} >Clear</Button>
             <Button type="button" onClick={e => dispatch(enableTooltips(!uiSettings.enableTooltips))}
         bsStyle="info">{uiSettings.enableTooltips ? 'Hide' : 'Show'}
             </Button>
@@ -74,8 +74,17 @@ class Page1 extends React.Component {
             label="Name"
             tooltipText="A word or set of words by which a person, animal, place, or thing is known, addressed, or referred"
             placeholder="Enter 1 letter to see validation in action"
+            showTooltip={uiSettings.enableTooltips}
+            help="Enter user name" />
+
+            { /* Email is setup to only validate on blur  the other handleFieldUpdate is to just update the controlled component */ }
+            <AVTextInput avValue={userProfile.email} onChange={e => this.handleFieldUpdate('userProfile', 'email', e.target.value, false)}
+            onBlur={e => this.handleFieldUpdate('userProfile', 'email', e.target.value)}
+            label="Email"
+            tooltipText="Email someone@nowhere.com"
+            placeholder="Enter email address"
             showTooltip={uiSettings.enableTooltips} />
-         
+           
             <AVDateInput avValue={userProfile.dob} onChange={e => this.handleFieldUpdate('userProfile', 'dob', e.target.value)}
             label="Date of Birth"
             tooltipText="Enter Date of Birth"
