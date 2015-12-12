@@ -42,8 +42,7 @@ export default class AVSelect extends Component {
     componentDidMount() {
         this.el = $(ReactDOM.findDOMNode(this._select));
         this.el.select2(Object.assign(this.props.options, {
-            placeholder: this.props.placeholder,
-            allowClear: true
+            placeholder: this.props.placeholder
         }));
         this.el.select2('val', this.props.value);
 

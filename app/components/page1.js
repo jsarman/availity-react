@@ -88,6 +88,9 @@ class Page1 extends React.Component {
             tooltipText="Pick your Favorite State"
             placeholder="Select State"
             showTooltip={uiSettings.enableTooltips}
+            options={{
+                allowClear: true
+            }}
 
             />
             
