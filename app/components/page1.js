@@ -22,12 +22,11 @@ class Page1 extends React.Component {
     console.log( this.props.userProfile );
   }
 
-  handleFieldUpdate(formName, field, value, validate = true) {
+  handleFieldUpdate(formName, field, value) {
     this.props.dispatch( updateUserProfile( {
       formName,
       field,
-      value,
-      validate
+      value
     } ) );
   }
 
@@ -81,9 +80,8 @@ class Page1 extends React.Component {
       placeholder="Enter 1 letter to see validation in action"
       showTooltip={uiSettings.enableTooltips}/>
 
-            { /* Email is setup to only validate on blur  the other handleFieldUpdate is to just update the controlled component */ }
+           
             <AVTextInput avValue={userProfile.email} onChange={e => this.handleFieldUpdate( 'userProfile', 'email', e.target.value )}
-
       label="Email"
       tooltipText="Email someone@nowhere.com"
       placeholder="Enter email address"

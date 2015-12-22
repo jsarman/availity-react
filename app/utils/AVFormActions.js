@@ -82,11 +82,6 @@ export const createAVFormUpdateAction = (event, validation, payload) => {
   return createAction( event, payload => payload, (payload) => {
     let validators = [];
     if (validation && validation[payload.field]) {
-      if (validation[payload.field].validateOnEvents) {
-        if (validation[payload.field].validateOnEvents.indexOf( event ) < 0) {
-          return {};
-        }
-      }
       if (validation[payload.field].required) {
         validators = [...validators, {
           field: payload.field,
