@@ -36,7 +36,7 @@ export default function(options = defaultOptions) {
           }
           if (!valid) {
             hasErrors = true;
-            if (typeof msg === 'function') {
+            if (typeof validator.msg === 'function') {
               message = validator.msg( action.payload, store.getState() );
             } else {
               message = validator.msg || '';

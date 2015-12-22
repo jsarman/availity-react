@@ -20,6 +20,19 @@ const checkRequired = (field) => {
 
 const buildValidator = (field, rule, chain, validateCurrentState) => {
   const validator = rule.validator;
+  let msg = 'The field is not valid';
+  if (rule.errorMessage) {
+    if (typeof rule.errorMessage == 'function') {
+      msg = (payload, state) => {
+        if (validateCurrentState) {
+          return rule.errorMessage( state[payload.formName][field].value, state );
+        }
+        return rule.errorMessage( payload.value, state );
+      };
+    } else {
+      msg = rule.errorMessage;
+    }
+  }
   if (typeof validator === 'object') {
     if (typeof validator.test === 'function') {
       return {
@@ -30,7 +43,7 @@ const buildValidator = (field, rule, chain, validateCurrentState) => {
           }
           return validator.test( payload.value );
         },
-        msg: rule.errorMessage || 'The field is not valid'
+        msg
       };
     } else {
       throw new Error( 'validators of type object must contain a function "test" that returns a boolean value' );
@@ -45,7 +58,7 @@ const buildValidator = (field, rule, chain, validateCurrentState) => {
         }
         return validator( payload.value, state );
       },
-      msg: rule.errorMessage || 'The field is not valid'
+      msg
     };
   } else if (typeof validator !== 'undefined') {
     throw new Error( 'validate must be either object with a function "test" or a function that returns a boolean value' );

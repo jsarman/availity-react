@@ -7,11 +7,9 @@ export const createAVFormReducer = (saveEvent, updateEvent, resetEvent, initialS
       if (action.errors) {
         Object.keys( newState ).forEach( field => {
           let error = action.errors[field];
-          if (error) {
-            newState[field] = Object.assign( newState[field], {
-              errors: error
-            } );
-          }
+          newState[field] = Object.assign( newState[field], {
+            errors: error
+          } );
         } );
       }
       return newState;
