@@ -52,9 +52,7 @@ export default class AVSelect extends Component {
         this.el.select2(Object.assign(this.props.options, {
             placeholder: this.props.placeholder
         }));
-        console.log(this._select)
-        //this.el.select2('val', this.props.value);
-
+       
         this.props.events.forEach(event => {
             this.el.on(event[0], this.props[event[1]]);
         });

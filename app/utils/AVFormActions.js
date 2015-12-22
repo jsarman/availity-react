@@ -1,76 +1,115 @@
-import { createAction } from 'redux-actions'
+import { createAction } from 'redux-actions';
 
-function getField(payload, state) {
-    return state[payload.formName][payload.field];
-}
-
-function validateRequiredIsOk(payload, state) {
-    const field = getField(payload, state);
-    if (field.validation) {
-        if (field.validation.required) {
-            if (typeof payload.value === 'undefined') {
-                return false;
-            }
-            if (typeof payload.value === 'string' && payload.value.trim() === '') {
-                return false;
-            }
-        }
+const checkRequired = (field) => {
+  return (payload, state) => {
+    let value;
+    if (typeof payload.value !== 'undefined') {
+      value = payload.value;
+    } else {
+      value = state[payload.formName][field].value;
+    }
+    if (typeof value === 'undefined') {
+      return false;
+    }
+    if (typeof value === 'string' && value.trim() === '') {
+      return false;
     }
     return true;
-}
+  };
+};
 
-function validateField(payload, state) {
-    if (!payload.validate) {
-        return true;
+const buildValidator = (field, rule, chain, validateCurrentState) => {
+  const validator = rule.validator;
+  if (typeof validator === 'object') {
+    if (typeof validator.test === 'function') {
+      return {
+        field,
+        func: (payload, state) => {
+          if (validateCurrentState) {
+            validator.test( state[payload.formName][field].value );
+          }
+          return validator.test( payload.value );
+        },
+        msg: rule.errorMessage || 'The field is not valid'
+      };
+    } else {
+      throw new Error( 'validators of type object must contain a function "test" that returns a boolean value' );
     }
-    const field = getField(payload, state);
-    if (field.validation) {
-        if (!validateRequiredIsOk(payload, state)) {
-            return false;
+  } else if (typeof validator === 'function') {
+    return {
+      field,
+      chain,
+      func: (payload, state) => {
+        if (validateCurrentState) {
+          return validator( state[payload.formName][field].value, state );
         }
-        const validator = field.validation.validator;
-        if (typeof validator === 'object') {
-            if (typeof validator.test === 'function') {
-                return field.validation.validator.test(payload.value);
-            } else {
-                throw new Error('validators of type object must contain a function "test" that returns a boolean value');
-            }
-        } else if (typeof validator === 'function') {
-            return validator(payload.value);
-        } else if (typeof validator !== 'undefined') {
-            throw new Error('validate must be either object with a function "test" or a function that returns a boolean value');
+        return validator( payload.value, state );
+      },
+      msg: rule.errorMessage || 'The field is not valid'
+    };
+  } else if (typeof validator !== 'undefined') {
+    throw new Error( 'validate must be either object with a function "test" or a function that returns a boolean value' );
+  }
+};
+
+export const createAVFormSaveAction = (event, validation, payload) => {
+  return createAction( event, payload => payload, (payload) => {
+    if (validation) {
+      let validators = [];
+      Object.keys( validation ).forEach( field => {
+        if (validation[field].required) {
+          validators = [...validators, {
+            field,
+            chain: true,
+            func: checkRequired( field ),
+            msg: validation[field].requiredMessage || 'The field is required'
+          }];
         }
+        for (let i in validation[field].validators) {
+          validators = [...validators, buildValidator( field, validation[field].validators[i], true, true )];
+        }
+      } );
+      return {
+        validator: {
+          payload: validators
+        }
+      };
     }
-    return true;
-}
+  } );
+};
 
-function getErrorMessage(payload, state) {
-    const field = getField(payload, state);
-    if (field.validation) {
-        if (!validateRequiredIsOk(payload, state)) {
-            return field.validation.requiredMessage || 'The field is required'
+export const createAVFormUpdateAction = (event, validation, payload) => {
+  return createAction( event, payload => payload, (payload) => {
+    let validators = [];
+    if (validation && validation[payload.field]) {
+      if (validation[payload.field].validateOnEvents) {
+        if (validation[payload.field].validateOnEvents.indexOf( event ) < 0) {
+          return {};
         }
-        return field.validation.errorMessage || 'The field is not valid'
+      }
+      if (validation[payload.field].required) {
+        validators = [...validators, {
+          field: payload.field,
+          func: checkRequired(),
+          msg: validation[payload.field].requiredMessage || 'The field is required'
+        }];
+      }
+      for (let i in validation[payload.field].validators) {
+        const validator = validation[payload.field].validators[i];
+        if (!validator.validateActions || validator.validateActions.indexOf( event ) > -1) {
+          validators = [...validators, buildValidator( payload.field, validator )];
+        }
+      }
     }
-    return '';
-}
+    return {
+      validator: {
+        payload: validators
+      }
+    };
+  } );
+};
 
-export function createAVFormUpdateAction(event, payload) {
-    return createAction(event, payload => payload, () => {
-        return {
-            validator: {
-                payload: [
-                    {
-                        func: validateField,
-                        msg: getErrorMessage
-                    }
-                ]
-            }
-        }
-    })
-}
-
-export function createAVFormResetAction(event, payload) {
-    return createAction(event, payload => payload);
-}
+export const createAVFormResetAction = (event, payload) => {
+  return createAction( event, payload => payload );
+};
 
