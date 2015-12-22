@@ -69,7 +69,7 @@ class Page1 extends React.Component {
         id: 'TX'
       }
     ];
-    let disabled = userProfile.email.value && userProfile.email.value.trim() !== '' ? '' : 'disabled';
+
     return (
       <form onSubmit={this.handleSubmit.bind( this )}>
             <Panel header={<h1>User Profile</h1>} footer={Buttons}>
@@ -87,10 +87,9 @@ class Page1 extends React.Component {
       placeholder="Enter email address"
       showTooltip={uiSettings.enableTooltips} />
 
-        <AVCheckbox avValue={userProfile.subscribe} onChange={e => this.handleFieldUpdate( 'userProfile', 'subscribe', !e.target.checked )}
+        <AVCheckbox avValue={userProfile.subscribe} onChange={e => this.handleFieldUpdate( 'userProfile', 'subscribe', e.target.checked )}
       label="Subscribe to Newsletter"
       tooltipText="Check here to subscribe to newsletter"
-      disabled={disabled}
       showTooltip={uiSettings.enableTooltips} />
 
       

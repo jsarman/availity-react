@@ -38,13 +38,11 @@ const validation = {
     }]
   },
   email: {
-    required: true,
+
     validators: [{
       validateActions: [SAVE_USER_PROFILE],
-      validator: value => {
-        return isEmail( value );
-      },
-      errorMessage: 'The email is invalid.'
+      validator: (value, state) => !state.userProfile.subscribe.value || isEmail( value ),
+      errorMessage: 'A valid email is required to subscribe to the newsletter.'
     }]
   },
   dob: {
